@@ -1,0 +1,397 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://code/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/AccessKey.tscn" id="3_key"]
+[ext_resource type="PackedScene" path="res://scenes/Portal.tscn" id="4_portal"]
+[ext_resource type="PackedScene" path="res://scenes/HUD.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://scenes/Lava.tscn" id="6_lava"]
+[ext_resource type="PackedScene" path="res://scenes/TurretEnemy.tscn" id="7_turret"]
+[ext_resource type="PackedScene" path="res://scenes/DisappearingPlatform.tscn" id="8_dp"]
+[ext_resource type="PackedScene" path="res://scenes/HealthPickup.tscn" id="9_hp"]
+
+[sub_resource type="Environment" id="env_l6"]
+background_mode = 1
+background_color = Color(0.05, 0.015, 0.01, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.3, 0.1, 0.05, 1)
+ambient_light_energy = 0.5
+fog_enabled = true
+fog_light_color = Color(0.4, 0.1, 0.05, 1)
+fog_density = 0.025
+glow_enabled = true
+glow_intensity = 1.2
+glow_strength = 1.0
+glow_bloom = 0.4
+glow_hdr_threshold = 0.7
+
+[sub_resource type="StandardMaterial3D" id="mat_wall_6"]
+albedo_color = Color(0.1, 0.05, 0.04, 1)
+metallic = 0.4
+roughness = 0.5
+emission_enabled = true
+emission = Color(1, 0.25, 0.1, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="StandardMaterial3D" id="mat_safe_pad"]
+albedo_color = Color(0.15, 0.1, 0.05, 1)
+metallic = 0.6
+roughness = 0.25
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="mesh_wall_6"]
+size = Vector3(60, 8, 0.5)
+
+[sub_resource type="BoxShape3D" id="shape_wall_6"]
+size = Vector3(60, 8, 0.5)
+
+[sub_resource type="BoxMesh" id="mesh_pad"]
+size = Vector3(7, 0.5, 7)
+
+[sub_resource type="BoxShape3D" id="shape_pad"]
+size = Vector3(7, 0.5, 7)
+
+[node name="Level06" type="Node3D"]
+script = ExtResource("1_level")
+level_name = "Trace Loop"
+time_limit_seconds = 300.0
+keys_required = 4
+objective = "LAVA OCEAN · platforms appear/disappear · keep moving · 4 keys"
+hud_scene = ExtResource("5_hud")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_l6")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.4, 0.3, 0, 0.6, 0.8, -0.5, -0.7, 0.52, 0, 14, 0)
+light_energy = 0.3
+light_color = Color(1, 0.6, 0.4, 1)
+
+[node name="WN" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -30)
+[node name="M" type="MeshInstance3D" parent="WN"]
+mesh = SubResource("mesh_wall_6")
+surface_material_override/0 = SubResource("mat_wall_6")
+[node name="C" type="CollisionShape3D" parent="WN"]
+shape = SubResource("shape_wall_6")
+
+[node name="WS" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 30)
+[node name="M" type="MeshInstance3D" parent="WS"]
+mesh = SubResource("mesh_wall_6")
+surface_material_override/0 = SubResource("mat_wall_6")
+[node name="C" type="CollisionShape3D" parent="WS"]
+shape = SubResource("shape_wall_6")
+
+[node name="WE" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 4, 0)
+[node name="M" type="MeshInstance3D" parent="WE"]
+mesh = SubResource("mesh_wall_6")
+surface_material_override/0 = SubResource("mat_wall_6")
+[node name="C" type="CollisionShape3D" parent="WE"]
+shape = SubResource("shape_wall_6")
+
+[node name="WW" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 4, 0)
+[node name="M" type="MeshInstance3D" parent="WW"]
+mesh = SubResource("mesh_wall_6")
+surface_material_override/0 = SubResource("mat_wall_6")
+[node name="C" type="CollisionShape3D" parent="WW"]
+shape = SubResource("shape_wall_6")
+
+[node name="Lava1" parent="." instance=ExtResource("6_lava")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, -15, -0.5, -15)
+
+[node name="Lava2" parent="." instance=ExtResource("6_lava")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 15, -0.5, -15)
+
+[node name="Lava3" parent="." instance=ExtResource("6_lava")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, -15, -0.5, 15)
+
+[node name="Lava4" parent="." instance=ExtResource("6_lava")]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, 15, -0.5, 15)
+
+[node name="StartPad" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1, 25)
+[node name="M" type="MeshInstance3D" parent="StartPad"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_safe_pad")
+[node name="C" type="CollisionShape3D" parent="StartPad"]
+shape = SubResource("shape_pad")
+
+[node name="ExitPad" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1, -25)
+[node name="M" type="MeshInstance3D" parent="ExitPad"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_safe_pad")
+[node name="C" type="CollisionShape3D" parent="ExitPad"]
+shape = SubResource("shape_pad")
+
+[node name="TurretPadNW" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1, -25)
+[node name="M" type="MeshInstance3D" parent="TurretPadNW"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_safe_pad")
+[node name="C" type="CollisionShape3D" parent="TurretPadNW"]
+shape = SubResource("shape_pad")
+
+[node name="TurretPadSE" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1, 25)
+[node name="M" type="MeshInstance3D" parent="TurretPadSE"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_safe_pad")
+[node name="C" type="CollisionShape3D" parent="TurretPadSE"]
+shape = SubResource("shape_pad")
+
+[node name="TurretNW" parent="." instance=ExtResource("7_turret")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1.25, -25)
+
+[node name="TurretSE" parent="." instance=ExtResource("7_turret")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1.25, 25)
+
+[node name="DP1" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 1, 8)
+visible_duration = 3.5
+hidden_duration = 1.5
+phase_offset = 0.0
+
+[node name="DP2" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, 0)
+visible_duration = 3.0
+hidden_duration = 2.0
+phase_offset = 1.0
+
+[node name="DP3" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -8)
+visible_duration = 3.0
+hidden_duration = 2.0
+phase_offset = 2.0
+
+[node name="DP4" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 0)
+visible_duration = 3.0
+hidden_duration = 2.0
+phase_offset = 3.0
+
+[node name="DP5" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, -8)
+visible_duration = 3.5
+hidden_duration = 1.5
+phase_offset = 0.5
+
+[node name="DP6" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, 16)
+visible_duration = 3.0
+hidden_duration = 2.0
+phase_offset = 1.5
+
+[node name="DP7" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, -16)
+visible_duration = 3.0
+hidden_duration = 2.0
+phase_offset = 2.5
+
+[node name="DP8" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 8)
+visible_duration = 4.0
+hidden_duration = 1.0
+phase_offset = 0.3
+
+[node name="DP9" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, 16)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP10" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, -10)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP11" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, 0)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP12" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, 10)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP13" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, -10)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP14" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 0)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP15" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 10)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP16" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP17" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP18" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, -20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP19" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP20" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP21" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, 20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP22" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, 20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP23" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, -20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP24" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1, -20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP25" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, 20)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP26" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1, -14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP27" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1, 14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP28" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1, -14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP29" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1, 14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP30" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -4)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP31" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 4)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP32" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, -4)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP33" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 4)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP34" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1, 0)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP35" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 1, 0)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP36" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="DP37" parent="." instance=ExtResource("8_dp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 14)
+trigger_delay = 2.0
+hidden_duration = 3.0
+
+[node name="HP1" parent="." instance=ExtResource("9_hp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1.7, 25)
+
+[node name="HP2" parent="." instance=ExtResource("9_hp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1.7, -25)
+
+[node name="L1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 6, -22)
+light_color = Color(1, 0.5, 0.2, 1)
+light_energy = 4.0
+omni_range = 16.0
+
+[node name="L2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 6, 22)
+light_color = Color(1, 0.5, 0.2, 1)
+light_energy = 4.0
+omni_range = 16.0
+
+[node name="L3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+light_color = Color(1, 0.8, 0.3, 1)
+light_energy = 5.0
+omni_range = 18.0
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 2, 25)
+
+[node name="Key1" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 0)
+
+[node name="Key2" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -8)
+
+[node name="Key3" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, 0)
+
+[node name="Key4" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 8)
+
+[node name="Portal" parent="." instance=ExtResource("4_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1, -25)
+required_keys = 4
+next_scene = "res://scenes/Level07.tscn"

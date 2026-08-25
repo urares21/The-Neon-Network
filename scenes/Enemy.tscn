@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://code/enemy_ai.gd" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/AmmoPickup.tscn" id="2_ammo"]
+[ext_resource type="PackedScene" path="res://models/Sentinel.glb" id="3_sentinel"]
+
+[sub_resource type="CapsuleShape3D" id="caps_enemy"]
+height = 1.6
+radius = 0.5
+
+[node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_enemy")
+ammo_pickup_scene = ExtResource("2_ammo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("caps_enemy")
+
+[node name="MeshRoot" type="Node3D" parent="."]
+
+[node name="SentinelModel" parent="MeshRoot" instance=ExtResource("3_sentinel")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="EyeLight" type="OmniLight3D" parent="MeshRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4)
+light_color = Color(1, 0.3, 0.15, 1)
+light_energy = 2.5
+omni_range = 5.0
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 1.5
+path_max_distance = 50.0
+radius = 0.5
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 1.2
+one_shot = true

@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://code/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/Bullet.tscn" id="2_bullet"]
+[ext_resource type="AudioStream" path="res://audio/shoot.wav" id="3_shoot"]
+[ext_resource type="PackedScene" path="res://models/Pistol.glb" id="4_pistol"]
+
+[sub_resource type="CapsuleShape3D" id="caps_player"]
+height = 1.8
+radius = 0.4
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player")
+bullet_scene = ExtResource("2_bullet")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("caps_player")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+fov = 80.0
+near = 0.05
+
+[node name="ShootRay" type="RayCast3D" parent="Head/Camera3D"]
+enabled = true
+target_position = Vector3(0, 0, -100)
+collision_mask = 5
+
+[node name="MuzzlePoint" type="Marker3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, -0.3, -0.7)
+
+[node name="PistolModel" parent="Head/Camera3D" instance=ExtResource("4_pistol")]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0.35, -0.3, -0.55)
+
+[node name="MuzzleFlash" type="OmniLight3D" parent="Head/Camera3D/MuzzlePoint"]
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 0.0
+omni_range = 4.0
+
+[node name="GunLight" type="SpotLight3D" parent="Head/Camera3D"]
+light_color = Color(0, 0.9, 0.85, 1)
+light_energy = 1.2
+spot_range = 18.0
+spot_angle = 38.0
+
+[node name="ShootSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_shoot")
+volume_db = 0.0

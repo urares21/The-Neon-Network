@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://code/turret_ai.gd" id="1_turret"]
+[ext_resource type="PackedScene" path="res://scenes/EnemyBullet.tscn" id="2_ebullet"]
+[ext_resource type="PackedScene" path="res://scenes/AmmoPickup.tscn" id="3_ammo"]
+
+[sub_resource type="CylinderShape3D" id="shape_base"]
+height = 0.4
+radius = 0.9
+
+[sub_resource type="SphereShape3D" id="shape_core"]
+radius = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_base"]
+albedo_color = Color(0.08, 0.06, 0.12, 1)
+metallic = 0.6
+roughness = 0.3
+emission_enabled = true
+emission = Color(0.6, 0.05, 0.4, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="CylinderMesh" id="mesh_base"]
+top_radius = 0.85
+bottom_radius = 0.95
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="mat_core"]
+albedo_color = Color(1, 0.2, 0.3, 1)
+metallic = 0.5
+roughness = 0.2
+emission_enabled = true
+emission = Color(1, 0.24, 0.44, 1)
+emission_energy_multiplier = 7.0
+
+[sub_resource type="SphereMesh" id="mesh_core"]
+radius = 0.8
+height = 1.6
+
+[sub_resource type="BoxMesh" id="mesh_barrel"]
+size = Vector3(0.18, 0.18, 1.2)
+
+[node name="TurretEnemy" type="StaticBody3D" groups=["enemies"]]
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("1_turret")
+bullet_scene = ExtResource("2_ebullet")
+ammo_pickup_scene = ExtResource("3_ammo")
+
+[node name="BaseCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+shape = SubResource("shape_base")
+
+[node name="BaseMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("mesh_base")
+surface_material_override/0 = SubResource("mat_base")
+
+[node name="TurretHead" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+
+[node name="CoreMesh" type="MeshInstance3D" parent="TurretHead"]
+mesh = SubResource("mesh_core")
+surface_material_override/0 = SubResource("mat_core")
+
+[node name="HeadCollision" type="CollisionShape3D" parent="TurretHead"]
+shape = SubResource("shape_core")
+
+[node name="Barrel" type="MeshInstance3D" parent="TurretHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8)
+mesh = SubResource("mesh_barrel")
+surface_material_override/0 = SubResource("mat_base")
+
+[node name="Muzzle" type="Marker3D" parent="TurretHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+
+[node name="MuzzleLight" type="OmniLight3D" parent="TurretHead/Muzzle"]
+light_color = Color(1, 0.3, 0.4, 1)
+light_energy = 0.0
+omni_range = 3.0
+
+[node name="CoreLight" type="OmniLight3D" parent="TurretHead"]
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 4.0
+omni_range = 10.0
+
+[node name="FireTimer" type="Timer" parent="."]
+wait_time = 1.6

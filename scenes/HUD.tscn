@@ -1,0 +1,327 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://code/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="sb_bar_bg"]
+bg_color = Color(0.05, 0.07, 0.13, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.2, 0.35, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="sb_bar_fg"]
+bg_color = Color(0, 1, 0.6, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="sb_panel_top"]
+bg_color = Color(0.05, 0.07, 0.13, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.9, 0.85, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="sb_pause_panel"]
+bg_color = Color(0.05, 0.07, 0.13, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 1, 0.85, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="sb_pause_btn"]
+bg_color = Color(0.06, 0.1, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.85, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="sb_pause_btn_hover"]
+bg_color = Color(0, 0.55, 0.5, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.24, 0.44, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer" groups=["hud"]]
+process_mode = 3
+script = ExtResource("1_hud")
+
+[node name="TimerPanel" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -90.0
+offset_top = 16.0
+offset_right = 90.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("sb_panel_top")
+
+[node name="TimerLabel" type="Label" parent="TimerPanel"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "03:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0, 1, 0.85, 1)
+
+[node name="MessageLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.18
+anchor_right = 0.5
+anchor_bottom = 0.18
+offset_left = -300.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 60.0
+text = ""
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(1, 0.24, 0.44, 1)
+
+[node name="Crosshair" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -16.0
+offset_right = 12.0
+offset_bottom = 16.0
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0, 1, 0.85, 1)
+
+[node name="BottomPanel" type="Control" parent="."]
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -120.0
+offset_right = 320.0
+offset_bottom = -20.0
+
+[node name="HealthLabel" type="Label" parent="BottomPanel"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 300.0
+offset_bottom = 28.0
+text = "100 / 100"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+
+[node name="HealthBar" type="ProgressBar" parent="BottomPanel"]
+offset_left = 0.0
+offset_top = 30.0
+offset_right = 280.0
+offset_bottom = 50.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+theme_override_styles/background = SubResource("sb_bar_bg")
+theme_override_styles/fill = SubResource("sb_bar_fg")
+
+[node name="KeysLabel" type="Label" parent="BottomPanel"]
+offset_left = 0.0
+offset_top = 55.0
+offset_right = 300.0
+offset_bottom = 80.0
+text = "KEYS: 0 / 3"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.24, 0.44, 1)
+
+[node name="DataLabel" type="Label" parent="BottomPanel"]
+offset_left = 0.0
+offset_top = 80.0
+offset_right = 300.0
+offset_bottom = 102.0
+text = "DATA: 0"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.72, 0, 1)
+
+[node name="AmmoLabel" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -90.0
+offset_right = -20.0
+offset_bottom = -20.0
+text = "AMMO  12 / 12"
+horizontal_alignment = 2
+vertical_alignment = 2
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0, 1, 0.85, 1)
+
+[node name="ReloadHint" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -118.0
+offset_right = -20.0
+offset_bottom = -94.0
+text = "[ R ] RELOAD"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.6, 0.75, 0.95, 0.7)
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -380.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 70.0
+text = ""
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.8, 0.85, 1, 0.85)
+
+[node name="BossPanel" type="Panel" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -240.0
+offset_top = 80.0
+offset_right = 240.0
+offset_bottom = 130.0
+theme_override_styles/panel = SubResource("sb_panel_top")
+
+[node name="BossLabel" type="Label" parent="BossPanel"]
+anchor_right = 1.0
+anchor_bottom = 0.45
+text = "MAINFRAME CORE"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.24, 0.44, 1)
+
+[node name="BossBar" type="ProgressBar" parent="BossPanel"]
+anchor_top = 0.55
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 4.0
+offset_right = -12.0
+offset_bottom = -8.0
+max_value = 250.0
+value = 250.0
+show_percentage = false
+theme_override_styles/background = SubResource("sb_bar_bg")
+theme_override_styles/fill = SubResource("sb_bar_fg")
+
+[node name="PauseOverlay" type="Control" parent="."]
+process_mode = 3
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="PauseOverlay"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="PausePanel" type="Panel" parent="PauseOverlay"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -210.0
+offset_right = 200.0
+offset_bottom = 210.0
+theme_override_styles/panel = SubResource("sb_pause_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseOverlay/PausePanel"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+text = "❚❚  PAUSED"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0, 1, 0.85, 1)
+
+[node name="Spacer" type="Control" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+
+[node name="ResumeButton" type="Button" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+text = "▶  RESUME"
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("sb_pause_btn")
+theme_override_styles/hover = SubResource("sb_pause_btn_hover")
+theme_override_styles/pressed = SubResource("sb_pause_btn_hover")
+
+[node name="RestartButton" type="Button" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+text = "↻  RESTART LEVEL"
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("sb_pause_btn")
+theme_override_styles/hover = SubResource("sb_pause_btn_hover")
+
+[node name="LevelSelectButton" type="Button" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 44)
+text = "▤  LEVEL SELECT"
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("sb_pause_btn")
+theme_override_styles/hover = SubResource("sb_pause_btn_hover")
+
+[node name="QuitButton" type="Button" parent="PauseOverlay/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+text = "✕  QUIT TO DESKTOP"
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("sb_pause_btn")
+theme_override_styles/hover = SubResource("sb_pause_btn_hover")

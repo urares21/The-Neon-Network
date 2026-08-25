@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://code/moving_platform.gd" id="1_plat"]
+
+[sub_resource type="BoxShape3D" id="shape_mp"]
+size = Vector3(6, 0.3, 6)
+
+[sub_resource type="StandardMaterial3D" id="mat_mp"]
+albedo_color = Color(0.12, 0.06, 0.18, 1)
+metallic = 0.6
+roughness = 0.25
+emission_enabled = true
+emission = Color(0, 0.7, 1, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="mesh_mp"]
+size = Vector3(6, 0.3, 6)
+
+[node name="MovingPlatform" type="AnimatableBody3D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_plat")
+
+[node name="C" type="CollisionShape3D" parent="."]
+shape = SubResource("shape_mp")
+
+[node name="M" type="MeshInstance3D" parent="."]
+mesh = SubResource("mesh_mp")
+surface_material_override/0 = SubResource("mat_mp")
+
+[node name="GlowLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+light_color = Color(0, 0.7, 1, 1)
+light_energy = 1.5
+omni_range = 3.5

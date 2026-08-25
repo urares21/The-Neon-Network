@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://code/disappearing_platform.gd" id="1_dp"]
+
+[sub_resource type="BoxShape3D" id="shape_dp"]
+size = Vector3(4, 0.4, 4)
+
+[sub_resource type="BoxShape3D" id="shape_trigger"]
+size = Vector3(4, 2.5, 4)
+
+[sub_resource type="StandardMaterial3D" id="mat_dp"]
+albedo_color = Color(0.05, 0.3, 0.4, 1)
+metallic = 0.55
+roughness = 0.25
+emission_enabled = true
+emission = Color(0, 0.9, 1, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="mesh_dp"]
+size = Vector3(4, 0.4, 4)
+
+[node name="DisappearingPlatform" type="AnimatableBody3D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_dp")
+
+[node name="C" type="CollisionShape3D" parent="."]
+shape = SubResource("shape_dp")
+
+[node name="M" type="MeshInstance3D" parent="."]
+mesh = SubResource("mesh_dp")
+surface_material_override/0 = SubResource("mat_dp")
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="C" type="CollisionShape3D" parent="Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("shape_trigger")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+light_color = Color(0, 0.9, 1, 1)
+light_energy = 2.5
+omni_range = 4.0

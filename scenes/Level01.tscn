@@ -1,0 +1,186 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://code/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/AccessKey.tscn" id="3_key"]
+[ext_resource type="PackedScene" path="res://scenes/Portal.tscn" id="4_portal"]
+[ext_resource type="PackedScene" path="res://scenes/HUD.tscn" id="5_hud"]
+
+[sub_resource type="Environment" id="env_neon"]
+background_mode = 1
+background_color = Color(0.024, 0.04, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.15, 0.3, 1)
+ambient_light_energy = 0.35
+fog_enabled = true
+fog_light_color = Color(0.1, 0.05, 0.2, 1)
+fog_density = 0.025
+fog_height_density = 0.0
+glow_enabled = true
+glow_intensity = 0.95
+glow_strength = 1.0
+glow_bloom = 0.25
+glow_hdr_threshold = 0.85
+adjustment_enabled = true
+adjustment_saturation = 1.15
+
+[sub_resource type="NavigationMesh" id="navmesh_l1"]
+agent_height = 1.9
+agent_radius = 0.5
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+
+[sub_resource type="StandardMaterial3D" id="mat_floor"]
+albedo_color = Color(0.06, 0.08, 0.16, 1)
+metallic = 0.2
+roughness = 0.55
+emission_enabled = true
+emission = Color(0, 0.6, 0.55, 1)
+emission_energy_multiplier = 0.18
+
+[sub_resource type="StandardMaterial3D" id="mat_wall"]
+albedo_color = Color(0.08, 0.05, 0.13, 1)
+metallic = 0.3
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.5, 0.05, 0.25, 1)
+emission_energy_multiplier = 0.12
+
+[sub_resource type="BoxMesh" id="mesh_floor"]
+size = Vector3(24, 0.4, 24)
+
+[sub_resource type="BoxShape3D" id="shape_floor"]
+size = Vector3(24, 0.4, 24)
+
+[sub_resource type="BoxMesh" id="mesh_wall_long"]
+size = Vector3(24, 4, 0.4)
+
+[sub_resource type="BoxShape3D" id="shape_wall_long"]
+size = Vector3(24, 4, 0.4)
+
+[sub_resource type="BoxMesh" id="mesh_wall_short"]
+size = Vector3(0.4, 4, 24)
+
+[sub_resource type="BoxShape3D" id="shape_wall_short"]
+size = Vector3(0.4, 4, 24)
+
+[node name="Level01" type="Node3D"]
+script = ExtResource("1_level")
+level_name = "Boot Sector"
+time_limit_seconds = 180.0
+keys_required = 1
+objective = "Tutorial · grab the key · enter the portal"
+hud_scene = ExtResource("5_hud")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_neon")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.4, 0.3, 0, 0.6, 0.8, -0.5, -0.7, 0.52, 0, 12, 0)
+light_color = Color(0.6, 0.7, 1, 1)
+light_energy = 0.35
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("navmesh_l1")
+
+[node name="Floor" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Floor"]
+mesh = SubResource("mesh_floor")
+surface_material_override/0 = SubResource("mat_floor")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Floor"]
+shape = SubResource("shape_floor")
+
+[node name="WallNorth" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/WallNorth"]
+mesh = SubResource("mesh_wall_long")
+surface_material_override/0 = SubResource("mat_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/WallNorth"]
+shape = SubResource("shape_wall_long")
+
+[node name="WallSouth" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/WallSouth"]
+mesh = SubResource("mesh_wall_long")
+surface_material_override/0 = SubResource("mat_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/WallSouth"]
+shape = SubResource("shape_wall_long")
+
+[node name="WallEast" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/WallEast"]
+mesh = SubResource("mesh_wall_short")
+surface_material_override/0 = SubResource("mat_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/WallEast"]
+shape = SubResource("shape_wall_short")
+
+[node name="WallWest" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/WallWest"]
+mesh = SubResource("mesh_wall_short")
+surface_material_override/0 = SubResource("mat_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/WallWest"]
+shape = SubResource("shape_wall_short")
+
+[node name="NeonStripA" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.5, -8)
+light_color = Color(0, 1, 0.85, 1)
+light_energy = 3.0
+omni_range = 12.0
+
+[node name="NeonStripB" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.5, 8)
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 3.0
+omni_range = 12.0
+
+[node name="NeonStripC" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+light_color = Color(1, 0.72, 0, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.1, 8)
+
+[node name="AccessKey" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.2, -6)
+
+[node name="Portal" parent="." instance=ExtResource("4_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+required_keys = 1
+next_scene = "res://scenes/Level02.tscn"
+
+[node name="TutorialSignA" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.5, 6)
+billboard = 1
+text = "WASD + MOUSE
+SPACE = JUMP
+SHIFT = SPRINT"
+font_size = 36
+outline_size = 8
+modulate = Color(0, 1, 0.85, 1)
+
+[node name="TutorialSignB" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.5, -6)
+billboard = 1
+text = "→ PICK UP THE KEY"
+font_size = 36
+outline_size = 8
+modulate = Color(1, 0.24, 0.44, 1)

@@ -1,0 +1,65 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://code/lava.gd" id="1_lava"]
+
+[sub_resource type="BoxShape3D" id="shape_trigger"]
+size = Vector3(10, 2, 10)
+
+[sub_resource type="BoxShape3D" id="shape_solid_floor"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="StandardMaterial3D" id="mat_lava"]
+albedo_color = Color(1, 0.3, 0.05, 1)
+metallic = 0.0
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.4, 0.05, 1)
+emission_energy_multiplier = 4.5
+
+[sub_resource type="PlaneMesh" id="mesh_lava_surface"]
+size = Vector2(10, 10)
+subdivide_width = 8
+subdivide_depth = 8
+
+[sub_resource type="StandardMaterial3D" id="mat_lava_glow"]
+albedo_color = Color(1, 0.1, 0.0, 0.4)
+emission_enabled = true
+emission = Color(1, 0.3, 0.05, 1)
+emission_energy_multiplier = 2.5
+transparency = 1
+
+[sub_resource type="BoxMesh" id="mesh_lava_floor_visual"]
+size = Vector3(10, 1, 10)
+
+[node name="Lava" type="Node3D" groups=["lava"]]
+
+[node name="SolidFloor" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="C" type="CollisionShape3D" parent="SolidFloor"]
+shape = SubResource("shape_solid_floor")
+
+[node name="M" type="MeshInstance3D" parent="SolidFloor"]
+mesh = SubResource("mesh_lava_floor_visual")
+surface_material_override/0 = SubResource("mat_lava_glow")
+
+[node name="DamageZone" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_lava")
+
+[node name="C" type="CollisionShape3D" parent="DamageZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("shape_trigger")
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("mesh_lava_surface")
+surface_material_override/0 = SubResource("mat_lava")
+
+[node name="HeatLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+light_color = Color(1, 0.5, 0.2, 1)
+light_energy = 4.0
+omni_range = 12.0

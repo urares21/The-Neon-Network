@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://code/teleporter.gd" id="1_tp"]
+
+[sub_resource type="CylinderShape3D" id="shape_tp"]
+height = 3.0
+radius = 1.2
+
+[sub_resource type="StandardMaterial3D" id="mat_tp"]
+albedo_color = Color(0.4, 0.05, 1, 1)
+metallic = 0.6
+roughness = 0.15
+emission_enabled = true
+emission = Color(0.6, 0.2, 1, 1)
+emission_energy_multiplier = 5.5
+
+[sub_resource type="TorusMesh" id="mesh_tp"]
+inner_radius = 0.9
+outer_radius = 1.2
+rings = 24
+
+[node name="Teleporter" type="Area3D" groups=["teleporter"]]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_tp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("shape_tp")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("mesh_tp")
+surface_material_override/0 = SubResource("mat_tp")
+
+[node name="Glow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+light_color = Color(0.6, 0.2, 1, 1)
+light_energy = 4.0
+omni_range = 7.0

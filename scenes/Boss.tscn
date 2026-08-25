@@ -1,0 +1,138 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://code/boss.gd" id="1_boss"]
+[ext_resource type="PackedScene" path="res://scenes/EnemyBullet.tscn" id="2_ebullet"]
+
+[sub_resource type="SphereMesh" id="mesh_explosion"]
+radius = 5.0
+height = 10.0
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="mat_explosion"]
+albedo_color = Color(1, 0.15, 0.3, 0.4)
+emission_enabled = true
+emission = Color(1, 0.2, 0.5, 1)
+emission_energy_multiplier = 4.0
+transparency = 1
+
+[sub_resource type="SphereShape3D" id="shape_boss"]
+radius = 7.0
+
+[sub_resource type="BoxShape3D" id="shape_boss_lower"]
+size = Vector3(10, 9, 10)
+
+[sub_resource type="StandardMaterial3D" id="mat_skin"]
+albedo_color = Color(0.1, 0.04, 0.18, 1)
+metallic = 0.7
+roughness = 0.25
+emission_enabled = true
+emission = Color(0.6, 0.05, 0.5, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="SphereMesh" id="mesh_skin"]
+radius = 2.6
+height = 5.2
+
+[sub_resource type="StandardMaterial3D" id="mat_eye"]
+albedo_color = Color(1, 0.2, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.24, 0.44, 1)
+emission_energy_multiplier = 8.0
+
+[sub_resource type="SphereMesh" id="mesh_eye"]
+radius = 0.45
+height = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_jaw"]
+albedo_color = Color(0.05, 0.01, 0.05, 1)
+metallic = 0.6
+roughness = 0.3
+emission_enabled = true
+emission = Color(1, 0.05, 0.2, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="mesh_jaw"]
+size = Vector3(3.5, 0.3, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="mat_beam"]
+albedo_color = Color(1, 0.4, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.4, 0.3, 1)
+emission_energy_multiplier = 14.0
+
+[sub_resource type="CylinderMesh" id="mesh_beam"]
+top_radius = 0.18
+bottom_radius = 0.18
+height = 2.0
+
+[node name="Boss" type="StaticBody3D" groups=["enemies", "boss"]]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_boss")
+enemy_bullet_scene = ExtResource("2_ebullet")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+shape = SubResource("shape_boss")
+
+[node name="CollisionShape3DLower" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+shape = SubResource("shape_boss_lower")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+
+[node name="Skin" type="MeshInstance3D" parent="Head"]
+mesh = SubResource("mesh_skin")
+surface_material_override/0 = SubResource("mat_skin")
+
+[node name="Jaw" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, -1.5)
+mesh = SubResource("mesh_jaw")
+surface_material_override/0 = SubResource("mat_jaw")
+
+[node name="EyeMeshLeft" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0.3, -1.85)
+mesh = SubResource("mesh_eye")
+surface_material_override/0 = SubResource("mat_eye")
+
+[node name="EyeMeshRight" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0.3, -1.85)
+mesh = SubResource("mesh_eye")
+surface_material_override/0 = SubResource("mat_eye")
+
+[node name="EyeLeft" type="OmniLight3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0.3, -2.1)
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 4.0
+omni_range = 7.0
+
+[node name="EyeRight" type="OmniLight3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0.3, -2.1)
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 4.0
+omni_range = 7.0
+
+[node name="HpLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+billboard = 1
+text = "MAINFRAME CORE  250 / 250"
+font_size = 60
+outline_size = 18
+modulate = Color(1, 0.24, 0.44, 1)
+
+[node name="FireTimer" type="Timer" parent="."]
+wait_time = 1.8
+autostart = true
+
+[node name="BeamVisual" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("mesh_beam")
+surface_material_override/0 = SubResource("mat_beam")
+
+[node name="ExplosionVisual" type="MeshInstance3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+mesh = SubResource("mesh_explosion")
+surface_material_override/0 = SubResource("mat_explosion")

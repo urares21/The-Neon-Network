@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://code/laser_wall.gd" id="1_laser"]
+
+[sub_resource type="BoxShape3D" id="shape_laser"]
+size = Vector3(6, 3, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="mat_laser"]
+albedo_color = Color(1, 0.05, 0.4, 0.7)
+metallic = 0.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(1, 0.05, 0.4, 1)
+emission_energy_multiplier = 9.0
+transparency = 1
+
+[sub_resource type="BoxMesh" id="mesh_laser"]
+size = Vector3(6, 3, 0.2)
+
+[node name="LaserWall" type="Area3D" groups=["hazard"]]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_laser")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("shape_laser")
+
+[node name="LaserMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("mesh_laser")
+surface_material_override/0 = SubResource("mat_laser")
+
+[node name="GlowLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+light_color = Color(1, 0.05, 0.4, 1)
+light_energy = 6.0
+omni_range = 5.0

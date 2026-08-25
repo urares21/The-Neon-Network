@@ -1,0 +1,192 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://code/menu.gd" id="1_menu"]
+
+[sub_resource type="StyleBoxFlat" id="sb_button"]
+bg_color = Color(0.05, 0.07, 0.13, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.85, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="sb_button_hover"]
+bg_color = Color(0, 0.5, 0.45, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.24, 0.44, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Main" type="Control"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_menu")
+start_scene = "res://scenes/Intro.tscn"
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.024, 0.04, 0.09, 1)
+
+[node name="TitleA" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.06
+anchor_right = 0.5
+anchor_bottom = 0.06
+offset_left = -400.0
+offset_right = 400.0
+offset_bottom = 70.0
+text = "THE NEON"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(0, 1, 0.85, 1)
+
+[node name="TitleB" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.06
+anchor_right = 0.5
+anchor_bottom = 0.06
+offset_left = -400.0
+offset_top = 70.0
+offset_right = 400.0
+offset_bottom = 140.0
+text = "NETWORK"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(1, 0.24, 0.44, 1)
+
+[node name="Subtitle" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.06
+anchor_right = 0.5
+anchor_bottom = 0.06
+offset_left = -400.0
+offset_top = 155.0
+offset_right = 400.0
+offset_bottom = 185.0
+text = "You are the virus. You have 3 minutes per server."
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 0.9)
+
+[node name="VBoxRoot" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.4
+anchor_right = 0.5
+anchor_bottom = 0.4
+offset_left = -260.0
+offset_right = 260.0
+offset_bottom = 360.0
+theme_override_constants/separation = 8
+
+[node name="PlayButton" type="Button" parent="VBoxRoot"]
+custom_minimum_size = Vector2(520, 56)
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "▶  INFILTRATE  (Start from intro)"
+
+[node name="LevelSelectLabel" type="Label" parent="VBoxRoot"]
+custom_minimum_size = Vector2(520, 20)
+text = "—  LEVEL SELECT  —"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.65, 0.9, 0.7)
+
+[node name="Row1" type="HBoxContainer" parent="VBoxRoot"]
+theme_override_constants/separation = 8
+
+[node name="Level1Button" type="Button" parent="VBoxRoot/Row1"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L1  Boot Sector"
+
+[node name="Level2Button" type="Button" parent="VBoxRoot/Row1"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L2  Cache Layer"
+
+[node name="Level3Button" type="Button" parent="VBoxRoot/Row1"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L3  Mainframe Core"
+
+[node name="Level4Button" type="Button" parent="VBoxRoot/Row1"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L4  Firewall Citadel"
+
+[node name="Row2" type="HBoxContainer" parent="VBoxRoot"]
+theme_override_constants/separation = 8
+
+[node name="Level5Button" type="Button" parent="VBoxRoot/Row2"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L5  Cache Stack"
+
+[node name="Level6Button" type="Button" parent="VBoxRoot/Row2"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L6  Trace Loop"
+
+[node name="Level7Button" type="Button" parent="VBoxRoot/Row2"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L7  Encrypted"
+
+[node name="Level8Button" type="Button" parent="VBoxRoot/Row2"]
+custom_minimum_size = Vector2(126, 38)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "L8  FINAL"
+
+[node name="Spacer" type="Control" parent="VBoxRoot"]
+custom_minimum_size = Vector2(520, 12)
+
+[node name="QuitButton" type="Button" parent="VBoxRoot"]
+custom_minimum_size = Vector2(520, 42)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("sb_button")
+theme_override_styles/hover = SubResource("sb_button_hover")
+text = "QUIT"
+
+[node name="ControlsHint" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.96
+anchor_right = 0.5
+anchor_bottom = 0.96
+offset_left = -440.0
+offset_top = -10.0
+offset_right = 440.0
+offset_bottom = 10.0
+text = "WASD MOVE  ·  MOUSE LOOK  ·  CLICK SHOOT  ·  R RELOAD  ·  SHIFT SPRINT  ·  SPACE JUMP  ·  ESC PAUSE"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.55, 0.65, 0.85, 0.7)

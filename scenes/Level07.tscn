@@ -1,0 +1,145 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://code/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/AccessKey.tscn" id="3_key"]
+[ext_resource type="PackedScene" path="res://scenes/Portal.tscn" id="4_portal"]
+[ext_resource type="PackedScene" path="res://scenes/HUD.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://scenes/MovingPlatform.tscn" id="6_mp"]
+[ext_resource type="PackedScene" path="res://scenes/LaserWall.tscn" id="7_laser"]
+
+[sub_resource type="Environment" id="env_l7"]
+background_mode = 1
+background_color = Color(0.005, 0.005, 0.02, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.05, 0.08, 0.18, 1)
+ambient_light_energy = 0.3
+fog_enabled = true
+fog_density = 0.025
+fog_light_color = Color(0.05, 0.1, 0.2, 1)
+glow_enabled = true
+glow_intensity = 1.2
+glow_strength = 1.0
+glow_bloom = 0.4
+glow_hdr_threshold = 0.7
+
+[sub_resource type="StandardMaterial3D" id="mat_pad"]
+albedo_color = Color(0.06, 0.06, 0.15, 1)
+metallic = 0.4
+roughness = 0.4
+emission_enabled = true
+emission = Color(0, 0.7, 1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="mesh_pad"]
+size = Vector3(14, 0.5, 12)
+
+[sub_resource type="BoxShape3D" id="shape_pad"]
+size = Vector3(14, 0.5, 12)
+
+[node name="Level07" type="Node3D"]
+script = ExtResource("1_level")
+level_name = "Encrypted Sector"
+time_limit_seconds = 240.0
+keys_required = 1
+objective = "VOID CHASM · 2 sync platforms · LASER alternates lanes · jump between to survive · 1 key at end"
+hud_scene = ExtResource("5_hud")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_l7")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.4, 0.3, 0, 0.6, 0.8, -0.5, -0.7, 0.52, 0, 14, 0)
+light_energy = 0.25
+light_color = Color(0.6, 0.7, 1, 1)
+
+[node name="StartPad" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 56)
+[node name="M" type="MeshInstance3D" parent="StartPad"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_pad")
+[node name="C" type="CollisionShape3D" parent="StartPad"]
+shape = SubResource("shape_pad")
+
+[node name="EndPad" type="StaticBody3D" parent="."]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, -56)
+[node name="M" type="MeshInstance3D" parent="EndPad"]
+mesh = SubResource("mesh_pad")
+surface_material_override/0 = SubResource("mat_pad")
+[node name="C" type="CollisionShape3D" parent="EndPad"]
+shape = SubResource("shape_pad")
+
+[node name="MP_East" parent="." instance=ExtResource("6_mp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.2, 48)
+travel_offset = Vector3(0, 0, -96)
+period = 20.0
+phase = 0.0
+initial_delay = 3.0
+
+[node name="MP_West" parent="." instance=ExtResource("6_mp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.2, 48)
+travel_offset = Vector3(0, 0, -96)
+period = 20.0
+phase = 0.0
+initial_delay = 3.0
+
+[node name="LaserEast1" parent="." instance=ExtResource("7_laser")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 30)
+on_duration = 3.5
+off_duration = 3.5
+initial_state_active = true
+
+[node name="LaserWest1" parent="." instance=ExtResource("7_laser")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 15)
+on_duration = 3.5
+off_duration = 3.5
+initial_state_active = false
+
+[node name="LaserEast2" parent="." instance=ExtResource("7_laser")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 0)
+on_duration = 3.5
+off_duration = 3.5
+initial_state_active = true
+
+[node name="LaserWest2" parent="." instance=ExtResource("7_laser")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -15)
+on_duration = 3.5
+off_duration = 3.5
+initial_state_active = false
+
+[node name="LaserEast3" parent="." instance=ExtResource("7_laser")]
+transform = Transform3D(0.6, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -30)
+on_duration = 3.5
+off_duration = 3.5
+initial_state_active = true
+
+[node name="L1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 56)
+light_color = Color(0, 0.7, 1, 1)
+light_energy = 4.0
+omni_range = 18.0
+
+[node name="L2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -56)
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 4.0
+omni_range = 18.0
+
+[node name="L3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+light_color = Color(1, 0.1, 0.4, 1)
+light_energy = 3.5
+omni_range = 14.0
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 58)
+
+[node name="KeyEnd" parent="." instance=ExtResource("3_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -58)
+
+[node name="Portal" parent="." instance=ExtResource("4_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60)
+required_keys = 1
+next_scene = "res://scenes/Level08.tscn"

@@ -1,0 +1,246 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://code/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/Enemy.tscn" id="3_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/AccessKey.tscn" id="4_key"]
+[ext_resource type="PackedScene" path="res://scenes/Portal.tscn" id="5_portal"]
+[ext_resource type="PackedScene" path="res://scenes/HUD.tscn" id="6_hud"]
+[ext_resource type="PackedScene" path="res://scenes/TurretEnemy.tscn" id="7_turret"]
+[ext_resource type="PackedScene" path="res://scenes/EnemySpawner.tscn" id="8_spawn"]
+
+[sub_resource type="Environment" id="env_l2"]
+background_mode = 1
+background_color = Color(0.04, 0.02, 0.1, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.2, 0.1, 0.25, 1)
+ambient_light_energy = 0.4
+fog_enabled = true
+fog_density = 0.03
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 1.0
+glow_bloom = 0.3
+glow_hdr_threshold = 0.85
+
+[sub_resource type="NavigationMesh" id="nav_l2"]
+agent_height = 1.9
+agent_radius = 0.5
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+
+[sub_resource type="StandardMaterial3D" id="mat_floor_2"]
+albedo_color = Color(0.06, 0.04, 0.12, 1)
+metallic = 0.3
+roughness = 0.5
+emission_enabled = true
+emission = Color(0.6, 0.05, 0.4, 1)
+emission_energy_multiplier = 0.18
+
+[sub_resource type="StandardMaterial3D" id="mat_wall_2"]
+albedo_color = Color(0.07, 0.06, 0.15, 1)
+metallic = 0.4
+roughness = 0.5
+emission_enabled = true
+emission = Color(0, 1, 0.85, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="StandardMaterial3D" id="mat_div"]
+albedo_color = Color(0.1, 0.06, 0.16, 1)
+metallic = 0.55
+roughness = 0.35
+emission_enabled = true
+emission = Color(1, 0.24, 0.44, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="mesh_floor_big"]
+size = Vector3(24, 0.4, 48)
+
+[sub_resource type="BoxShape3D" id="shape_floor_big"]
+size = Vector3(24, 0.4, 48)
+
+[sub_resource type="BoxMesh" id="mesh_wall_long_2"]
+size = Vector3(24, 6, 0.4)
+
+[sub_resource type="BoxShape3D" id="shape_wall_long_2"]
+size = Vector3(24, 6, 0.4)
+
+[sub_resource type="BoxMesh" id="mesh_wall_short_2"]
+size = Vector3(0.4, 6, 48)
+
+[sub_resource type="BoxShape3D" id="shape_wall_short_2"]
+size = Vector3(0.4, 6, 48)
+
+[sub_resource type="BoxMesh" id="mesh_div_seg"]
+size = Vector3(10, 6, 0.5)
+
+[sub_resource type="BoxShape3D" id="shape_div_seg"]
+size = Vector3(10, 6, 0.5)
+
+[node name="Level02" type="Node3D"]
+script = ExtResource("1_level")
+level_name = "Cache Layer"
+time_limit_seconds = 210.0
+keys_required = 4
+objective = "Two rooms · 4 keys · turret guards the exit"
+hud_scene = ExtResource("6_hud")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_l2")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.4, 0.3, 0, 0.6, 0.8, -0.5, -0.7, 0.52, 0, 14, 0)
+light_energy = 0.3
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("nav_l2")
+
+[node name="Floor" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/Floor"]
+mesh = SubResource("mesh_floor_big")
+surface_material_override/0 = SubResource("mat_floor_2")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/Floor"]
+shape = SubResource("shape_floor_big")
+
+[node name="WN" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -24)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/WN"]
+mesh = SubResource("mesh_wall_long_2")
+surface_material_override/0 = SubResource("mat_wall_2")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/WN"]
+shape = SubResource("shape_wall_long_2")
+
+[node name="WS" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 24)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/WS"]
+mesh = SubResource("mesh_wall_long_2")
+surface_material_override/0 = SubResource("mat_wall_2")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/WS"]
+shape = SubResource("shape_wall_long_2")
+
+[node name="WE" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3, 0)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/WE"]
+mesh = SubResource("mesh_wall_short_2")
+surface_material_override/0 = SubResource("mat_wall_2")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/WE"]
+shape = SubResource("shape_wall_short_2")
+
+[node name="WW" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3, 0)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/WW"]
+mesh = SubResource("mesh_wall_short_2")
+surface_material_override/0 = SubResource("mat_wall_2")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/WW"]
+shape = SubResource("shape_wall_short_2")
+
+[node name="DivAL" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 6)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/DivAL"]
+mesh = SubResource("mesh_div_seg")
+surface_material_override/0 = SubResource("mat_div")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/DivAL"]
+shape = SubResource("shape_div_seg")
+
+[node name="DivAR" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, 6)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/DivAR"]
+mesh = SubResource("mesh_div_seg")
+surface_material_override/0 = SubResource("mat_div")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/DivAR"]
+shape = SubResource("shape_div_seg")
+
+[node name="DivBL" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -6)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/DivBL"]
+mesh = SubResource("mesh_div_seg")
+surface_material_override/0 = SubResource("mat_div")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/DivBL"]
+shape = SubResource("shape_div_seg")
+
+[node name="DivBR" type="StaticBody3D" parent="NavigationRegion3D"]
+collision_layer = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, -6)
+[node name="M" type="MeshInstance3D" parent="NavigationRegion3D/DivBR"]
+mesh = SubResource("mesh_div_seg")
+surface_material_override/0 = SubResource("mat_div")
+[node name="C" type="CollisionShape3D" parent="NavigationRegion3D/DivBR"]
+shape = SubResource("shape_div_seg")
+
+[node name="L1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 16)
+light_color = Color(1, 0.24, 0.44, 1)
+light_energy = 3.5
+omni_range = 14.0
+
+[node name="L2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+light_color = Color(1, 0.72, 0, 1)
+light_energy = 3.0
+omni_range = 10.0
+
+[node name="L3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -16)
+light_color = Color(0, 1, 0.85, 1)
+light_energy = 3.5
+omni_range = 14.0
+
+[node name="Spawner1" parent="." instance=ExtResource("8_spawn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 16)
+spawn_interval = 4.0
+max_alive = 3
+max_total = 12
+initial_delay = 3.0
+spawn_radius = 6.0
+
+[node name="Spawner2" parent="." instance=ExtResource("8_spawn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -16)
+spawn_interval = 5.0
+max_alive = 3
+max_total = 12
+initial_delay = 6.0
+spawn_radius = 6.0
+
+[node name="Turret" parent="." instance=ExtResource("7_turret")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 20)
+
+[node name="Enemy1" parent="." instance=ExtResource("3_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.1, 16)
+
+[node name="Enemy2" parent="." instance=ExtResource("3_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.1, 16)
+
+[node name="Enemy3" parent="." instance=ExtResource("3_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.1, -16)
+
+[node name="Enemy4" parent="." instance=ExtResource("3_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.1, -16)
+
+[node name="Key1" parent="." instance=ExtResource("4_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.2, 20)
+
+[node name="Key2" parent="." instance=ExtResource("4_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.2, 20)
+
+[node name="Key3" parent="." instance=ExtResource("4_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.2, -18)
+
+[node name="Key4" parent="." instance=ExtResource("4_key")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.2, -18)
+
+[node name="Portal" parent="." instance=ExtResource("5_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+required_keys = 4
+next_scene = "res://scenes/Level03.tscn"
